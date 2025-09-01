@@ -16,7 +16,8 @@
       "Bash(docker-compose:*)",
       "Bash(docker logs:*)",
       "Bash(echo)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(./deploy-contract.sh:*)"
     ],
     "deny": []
   }

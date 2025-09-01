@@ -1,4 +1,4 @@
-sdk-version: 2.9.0
+sdk-version: 2.10.2
 name: simple-contract
 source: daml
 version: 1.0.0
@@ -7,4 +7,4 @@ dependencies:
   - daml-stdlib
   - daml-script
 build-options:
-  - --target=1.dev
+  - --target=1.15

@@ -23,9 +23,8 @@ if [ $counter -ge $timeout ]; then
     exit 1
 fi
 
-# Bootstrap the network (connect participants to domain)
-echo "Bootstrapping Canton network..."
-docker exec canton-local /canton/bin/canton -c /canton/config/canton.conf --auto-connect-local --bootstrap /canton/config/bootstrap.canton
+# Bootstrap is now handled by the daemon startup
+echo "Canton network bootstrapped during startup"
 
 echo "Canton network is running!"
 echo "Available endpoints:"
