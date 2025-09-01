@@ -1,0 +1,21 @@
+services:
+  canton:
+    build: .
+    container_name: canton-local
+    ports:
+      - "5011:5011"  # Domain public API
+      - "5012:5012"  # Domain admin API
+      - "5021:5021"  # Participant 1 ledger API
+      - "5022:5022"  # Participant 1 admin API
+      - "5031:5031"  # Participant 2 ledger API
+      - "5032:5032"  # Participant 2 admin API
+      - "7575:7575"  # Health check
+    volumes:
+      - ./canton-config:/canton/config
+      - ./daml:/canton/daml
+    command: /canton/bin/canton daemon --config /canton/config/canton.conf --bootstrap /canton/config/bootstrap.canton
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7575/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

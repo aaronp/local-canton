@@ -1,0 +1,39 @@
+module SimpleContract where
+
+import Daml.Script
+
+template Asset
+  with
+    issuer : Party
+    owner : Party
+    name : Text
+    value : Decimal
+  where
+    signatory issuer
+    observer owner
+    
+    choice Transfer : ContractId Asset
+      with
+        newOwner : Party
+      controller owner
+      do
+        create this with owner = newOwner
+
+testAsset : Script ()
+testAsset = script do
+  alice <- allocateParty "Alice"
+  bob <- allocateParty "Bob"
+  
+  -- Alice creates an asset
+  assetCid <- submit alice do
+    createCmd Asset with
+      issuer = alice
+      owner = alice
+      name = "Test Asset"
+      value = 100.0
+  
+  -- Alice transfers the asset to Bob
+  newAssetCid <- submit alice do
+    exerciseCmd assetCid Transfer with newOwner = bob
+  
+  return ()

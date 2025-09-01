@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(docker pull:*)",
+      "Bash(./start-canton.sh:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(daml:*)",
+      "Bash(ls:*)",
+      "Bash(./start-local-canton.sh:*)",
+      "Bash(./bin/canton:*)",
+      "Bash(curl:*)",
+      "Bash(docker exec:*)",
+      "Bash(true)",
+      "Bash(docker-compose:*)",
+      "Bash(docker logs:*)",
+      "Bash(echo)",
+      "Bash(timeout:*)"
+    ],
+    "deny": []
+  }
+}
