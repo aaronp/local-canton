@@ -1,10 +1,14 @@
 // Bootstrap script to connect participants to domain
-val domain = domains.local
-val participant1 = participants.local.participant1
-val participant2 = participants.local.participant2
+val domain_ref = domains.local.head
+val participant1_ref = participants.local.find(_.name == "participant1").get
+val participant2_ref = participants.local.find(_.name == "participant2").get
 
 // Connect participants to domain
-participant1.domains.connect_local(domain)
-participant2.domains.connect_local(domain)
+participant1_ref.domains.connect_local(domain_ref)
+participant2_ref.domains.connect_local(domain_ref)
+
+// Verify connections
+println("Participant 1 connected domains: " + participant1_ref.domains.list_connected())
+println("Participant 2 connected domains: " + participant2_ref.domains.list_connected())
 
 println("Canton network initialized successfully!")

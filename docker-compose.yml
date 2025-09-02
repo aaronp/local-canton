@@ -13,7 +13,7 @@ services:
     volumes:
       - ./canton-config:/canton/config
       - ./daml:/canton/daml
-    command: /canton/bin/canton daemon --config /canton/config/canton.conf --auto-connect-local
+    command: /canton/bin/canton daemon --config /canton/config/canton.conf --bootstrap /canton/config/bootstrap.canton
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7575/health"]
       interval: 30s

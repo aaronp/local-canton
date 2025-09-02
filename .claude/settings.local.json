@@ -17,7 +17,9 @@
       "Bash(docker logs:*)",
       "Bash(echo)",
       "Bash(timeout:*)",
-      "Bash(./deploy-contract.sh:*)"
+      "Bash(./deploy-contract.sh:*)",
+      "WebFetch(domain:docs.daml.com)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }
