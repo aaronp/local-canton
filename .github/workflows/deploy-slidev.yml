@@ -1,8 +1,8 @@
-name: Deploy Slidev to GitHub Pages
+name: Deploy Slidev (slides/canton) to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 permissions:
@@ -20,6 +20,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: slides/canton
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,19 +32,21 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: slides/canton/package-lock.json
 
       - name: Install deps
         run: npm ci
 
-      # For project pages (user.github.io/<repo>), set the base path.
-      # If your repo is a user/organization site (user.github.io), change --base / to keep root.
+      # For project pages (user.github.io/<repo>) use base "/<repo>/".
+      # For a user/org site (user.github.io) change base to "/".
       - name: Build Slidev
         run: npx slidev build --base "/${{ env.REPO_NAME }}/"
 
+      # Upload the built site (slides/canton/dist) as the Pages artifact
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: slides/canton/dist
 
   deploy:
     needs: build
