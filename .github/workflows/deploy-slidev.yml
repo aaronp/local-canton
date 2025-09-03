@@ -1,8 +1,8 @@
-name: Deploy Slidev (slides/canton) to GitHub Pages
+name: Deploy Slidev (Bun) to GitHub Pages
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -27,22 +27,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: slides/canton/package-lock.json
+          bun-version: "1.x"
 
+      # Bun will read bun.lockb and cache automatically via setup-bun
       - name: Install deps
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       # For project pages (user.github.io/<repo>) use base "/<repo>/".
-      # For a user/org site (user.github.io) change base to "/".
-      - name: Build Slidev
-        run: npx slidev build --base "/${{ env.REPO_NAME }}/"
+      # For user/org site (user.github.io) change base to "/".
+      - name: Build Slidev with Bun
+        run: bunx slidev build --base "/${{ env.REPO_NAME }}/"
 
-      # Upload the built site (slides/canton/dist) as the Pages artifact
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
