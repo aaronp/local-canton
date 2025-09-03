@@ -18,7 +18,7 @@ mdc: true
 # Canton
 ## The Privacy-Preserving Enterprise Blockchain
 
-*Digital Asset's revolutionary approach to enterprise blockchain technology*
+*Digital Asset's approach to enterprise blockchain technology*
 
 <div class="pt-12">
   <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
