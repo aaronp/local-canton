@@ -27,20 +27,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Pin a specific Bun version or use "latest"
       - name: Setup Bun
-        id: bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.2.21" # or: latest
-
-      # Fallback if setup-bun fails (rare, but avoids 400s breaking deploys)
-      - name: Fallback install Bun (curl)
-        if: failure() && steps.bun.outcome == 'failure'
-        run: |
-          curl -fsSL https://bun.sh/install | bash -s "bun-v1.2.21"
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-        shell: bash
+          bun-version: "1.2.21" # pin or use "latest"
 
       - name: Bun version
         run: bun --version
@@ -48,8 +38,16 @@ jobs:
       - name: Install deps
         run: bun install --frozen-lockfile
 
-      # For project Pages (user.github.io/<repo>) use base "/<repo>/".
-      # For a user/org root site (<user>.github.io) change to --base "/".
+      # Ensure Playwright is available for Slidev's export/build
+      # (This modifies the workspace only in CI; nothing is committed back.)
+      - name: Add Playwright Chromium (dev)
+        run: bun add -d playwright-chromium
+
+      - name: Install Playwright browsers (Chromium)
+        run: bunx playwright install --with-deps chromium
+
+      # For project pages (user.github.io/<repo>)
+      # If your repo is <user>.github.io or you use a custom domain, change to --base "/"
       - name: Build Slidev with Bun
         run: bunx slidev build --base "/${{ env.REPO_NAME }}/"
 
