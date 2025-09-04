@@ -2,62 +2,14 @@
 
 This project demonstrates how to spin up a local Canton network and deploy a simple DAML contract.
 
-## Prerequisites
+**[View the Canton presentation slides](https://aaronp.github.io/local-canton)**
+
+## Links
 
 - DAML SDK (install from https://docs.daml.com/getting-started/installation.html)
-- Java 17 or later
-- curl (for downloading Canton)
-
-## Quick Start
-
-### Option 1: Local Installation (Recommended)
-
-1. Set up Canton locally:
-   ```bash
-   ./setup-local.sh
-   ```
-
-2. Start the Canton network:
-   ```bash
-   ./start-local-canton.sh
-   ```
-
-### Option 2: Docker (if you have access to Canton images)
-
-1. Start the Canton network:
-   ```bash
-   ./start-canton.sh
-   ```
-
-2. Deploy and test the sample contract:
-   ```bash
-   ./deploy-contract.sh
-   ```
-
-3. Stop the Canton network:
-   ```bash
-   ./stop-canton.sh
-   ```
-
-## What's Included
-
-- **Docker Compose setup**: Runs Canton with domain and two participants
-- **Simple DAML contract**: An Asset contract with transfer functionality
-- **Bootstrap script**: Automatically connects participants to the domain
-- **Test script**: Demonstrates contract deployment and execution
-
-## Network Endpoints
-
-- Domain public API: http://localhost:5011
-- Participant 1 ledger API: http://localhost:5021
-- Participant 2 ledger API: http://localhost:5031
-
-## File Structure
-
-- `docker-compose.yml` - Docker Compose configuration
-- `canton-config/` - Canton configuration files
-- `daml/` - DAML contract source code
-- `start-canton.sh` - Start script
-- `deploy-contract.sh` - Contract deployment script
-- `stop-canton.sh` - Stop script
-
+- [DAML Overview](https://www.youtube.com/watch?v=PsRNnDaxiuc)
+- [What is DAML](https://www.youtube.com/watch?v=4P3JpWf_yyU)
+- [The Canton Ledger Model](https://www.youtube.com/watch?v=U1vpvmZuthA)
+- [Multi-party applications overview](https://www.youtube.com/watch?v=n6iBA5Cng5s&list=PLtJt4t22tLNG6LxbrJAZGHeHUlW2JQk_X)
+- [How to automate ledger actions with DAML triggers](https://www.youtube.com/watch?v=wJva_DZT8C8)
+- [DAML 101: bring your own front-end](https://www.youtube.com/watch?v=9e-J1yi-Ej0)
