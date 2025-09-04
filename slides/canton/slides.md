@@ -337,7 +337,7 @@ You can explore DAML workflows on your own machine:
 3. **Visualize workflows** in your browser
 
 <div class="mt-8 flex justify-center">
-  <img src="/demo.png" alt="DAML Navigator showing workflow visualization" class="rounded shadow-lg" style="max-width: 90%; height: auto;">
+  <img src="/demo.png" alt="DAML Navigator showing workflow visualization" class="rounded shadow-lg" style="max-height: 250px; width: auto;">
 </div>
 
 ---
@@ -430,7 +430,6 @@ This reduces trust in the bridge, but increases protocol complexity.
 
 ---
 layout: default
-transition: fade-out
 ---
 # Canton Interoperability
 
@@ -493,7 +492,6 @@ setup = script do
 </div>
 ---
 layout: default
-transition: fade-out
 ---
 # Canton Interoperability
 ### Event Listener Job
@@ -584,6 +582,7 @@ main().catch(console.error);
 
 ---
 layout: default
+transition: fade-out
 ---
 
 # Key Takeaways
@@ -607,6 +606,7 @@ layout: default
 ---
 layout: end
 class: text-center
+transition: fade-out
 ---
 
 # Canton
