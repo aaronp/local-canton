@@ -175,48 +175,177 @@ layout: default
 layout: default
 ---
 
-# Blockchain Interoperability Revolution
+# What is DAML?
 
-Canton's unique approach to cross-chain functionality
+**DAML (Digital Asset Modeling Language)** is Canton's smart contract language - purpose-built for enterprise applications
 
-<div class="mt-8">
+<v-clicks>
 
-## Traditional Cross-Chain (Bridges)
-```mermaid {scale: 0.4}
-graph LR
-    A[Ethereum] -.->|Bridge| B[Bridge Contract]
-    B -.->|Risk| C[Target Chain]
-    B -.->|Hacks| D[Billions Lost]
-```
+- **Haskell-inspired** functional language with strong static typing
+- **Business logic focused** - Write what the contract does, not how
+- **Privacy by design** - Parties only see contracts they're involved in
+- **Built-in authorization** - Who can do what is part of the language
+- **No reentrancy bugs** - Functional design prevents common vulnerabilities
+- **Multi-party workflows** - Complex business processes as first-class concepts
 
-## Canton Native Interoperability  
-```mermaid {scale: 0.4}
-graph LR
-    A[Canton App 1] -->|Atomic| B[Global Ledger]
-    C[Canton App 2] -->|Atomic| B
-    D[Canton App N] -->|Atomic| B
-    B -->|No Bridges| E[Secure & Instant]
+</v-clicks>
+
+---
+layout: default
+---
+
+# DAML vs Traditional Smart Contracts
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+## Solidity/EVM
+```solidity
+// Everything is public by default
+mapping(address => uint) balances;
+
+function transfer(address to, uint amt) {
+  require(balances[msg.sender] >= amt);
+  // Reentrancy risk!
+  balances[msg.sender] -= amt;
+  balances[to] += amt;
+  // Manual access control
+  emit Transfer(msg.sender, to, amt);
+}
 ```
 
 </div>
 
+<div>
+
+## DAML
+```haskell
+template Token
+  with
+    owner : Party
+    amount : Decimal
+  where
+    signatory owner
+    
+    choice Transfer : ContractId Token
+      with
+        newOwner : Party
+      controller owner
+      do create this with owner = newOwner
+```
+
+</div>
+
+</div>
 
 <v-clicks>
 
-- **No Bridges Required** between Canton applications
-- **Atomic Transactions** across multiple applications
-- **Bitcoin Integration** (CBTC) already implemented with 1:1 backing
+- **Privacy built-in** - Only `owner` and `newOwner` see the contract
+- **Authorization explicit** - `controller owner` ensures only owner can transfer
+- **No reentrancy possible** - Functional, atomic execution
 
 </v-clicks>
 
+---
+layout: default
+---
 
+## DAML Key Concepts
+
+<div class="mt-4 text-sm">
+
+### 1. Templates - the structure and rules of contracts
+```haskell
+template Asset
+  with
+    issuer : Party
+    owner : Party
+    description : Text
+  where
+    signatory issuer, owner
+```
+
+### 2. Choices - Actions that parties can take on contracts
+
+```haskell
+choice Transfer : ContractId Asset
+  with newOwner : Party
+  controller owner
+  do create this with owner = newOwner
+```
+
+### 3. Parties & Authorization - First-class representation of real-world entities
+
+- **Signatory**: Must consent to create/archive
+- **Controller**: Can exercise choices
+- **Observer**: Can see but not act
+
+</div>
+
+---
+layout: default
+---
+
+# Real-World DAML Example: Securities Settlement
+
+```haskell {all|1-7|9-14|16-22}{maxHeight:'20pc'}
+template SecurityTrade
+  with
+    buyer : Party
+    seller : Party
+    security : Text
+    quantity : Decimal
+    price : Decimal
+  where
+    signatory buyer, seller
+    
+    choice SettleWithDvP : (ContractId Security, ContractId Cash)
+      with
+        securityCid : ContractId Security
+        cashCid : ContractId Cash
+      controller buyer, seller
+      do
+        -- Atomic Delivery vs Payment
+        security <- fetch securityCid
+        cash <- fetch cashCid
+        
+        -- Transfer happens atomically or not at all
+        newSecurity <- exercise securityCid Transfer with newOwner = buyer
+        newCash <- exercise cashCid Transfer with newOwner = seller
+        return (newSecurity, newCash)
+```
+
+<v-clicks>
+
+- **Atomic DvP** - Both legs settle together or fail together
+- **Privacy preserved** - Other market participants don't see this trade
+- **No counterparty risk** - Smart contract enforces the settlement
+
+</v-clicks>
+
+---
+layout: default
+---
+
+# Try DAML Locally
+
+You can explore DAML workflows on your own machine:
+
+1. **Download Canton** from: https://github.com/digital-asset/daml/releases/tag/v2.10.2
+2. **Run the examples** with built-in DAML Navigator
+3. **Visualize workflows** in your browser
+
+<div class="mt-8 flex justify-center">
+  <img src="/demo.png" alt="DAML Navigator showing workflow visualization" class="rounded shadow-lg" style="max-width: 90%; height: auto;">
+</div>
 
 ---
 layout: default
 transition: fade-out
 ---
 
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 
 <div class="mt-8">
 
@@ -237,7 +366,7 @@ Therefore, to make it *atomically safe* requires a bridge design which:
 ---
 layout: default
 ---
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 
 #### Option 1. Escrow + Finality + Timeouts (recommended for MVP)
 
@@ -273,7 +402,7 @@ layout: default
 ---
 layout: default
 ---
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 
 #### Option 2. Two-Phase commit with a trusted operator (simplest operationally)
  * One bridge process acts as a transaction manager:
@@ -287,7 +416,7 @@ Guarantees come from idempotency keys, durable outbox/inbox, and sagas. This is 
 ---
 layout: default
 ---
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 
 ### Option 3. Hash-Time-Locked (HTLC) swap (more trust-minimised)
 Both sides lock under the same hash h=H(s) and timeouts T_eth > T_daml.
@@ -303,13 +432,13 @@ This reduces trust in the bridge, but increases protocol complexity.
 layout: default
 transition: fade-out
 ---
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 
 ### Appendix: Example Daml Bridge Contract
 
 <div class="mt-8">
 
-```ts {all}{maxHeight:'20pc'}
+```haskell {all}{maxHeight:'20pc'}
 module Bridge where
 
 import Daml.Script
@@ -366,7 +495,7 @@ setup = script do
 layout: default
 transition: fade-out
 ---
-# Canton <-> Ethereum Interoperability
+# Canton Interoperability
 ### Event Listener Job
 
 <div class="mt-8">
